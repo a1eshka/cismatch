@@ -9,6 +9,12 @@ import { Container } from '@/components/shared/Conatiner';
 import { UserRound } from 'lucide-react';
 import type { Metadata } from 'next'
 
+type Props = {
+  params: {
+    id: string;
+  };
+};
+
 interface Post {
   id: string;
   title: string;
@@ -26,13 +32,10 @@ interface Post {
     avatar_url?: string;
   };
 }
-interface PageParams {
-  params: {
-    id: string;
-  };
-}
 
-export async function generateMetadata({ params }: PageParams): Promise<Metadata> {
+
+// ✅ Генерация метаданных
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const postId = params.id;
   const response = await apiService.get(`/api/post/${postId}`);
   const post: Post = response.data ?? response;
@@ -42,12 +45,14 @@ export async function generateMetadata({ params }: PageParams): Promise<Metadata
 
   return {
     title: `CISMatch — ${post.title}`,
-    description: description, // например, первые 160 символов
+    description,
     keywords:
-      'поиск тиммейтов CS2, найти команду CS2, новости cs2, ищу команду, ищу тиммейта faceit, натий тиммейта, найти команду кс', // ваш список
-  }
+      'поиск тиммейтов CS2, найти команду CS2, новости cs2, ищу команду, ищу тиммейта faceit, найти тиммейта, найти команду кс',
+  };
 }
-export default async function PostsPageDetail({ params }: PageParams) {
+
+// ✅ Основная страница
+export default async function PostsPageDetail({ params }: Props) {
   const postId = params.id;
   const response = await apiService.get(`/api/post/${postId}`);
   const post: Post = response.data ?? response;
