@@ -7,13 +7,12 @@ import CommentsList from '@/components/shared/comments/CommentsList';
 import { Title } from '@/components/shared/title';
 import { Container } from '@/components/shared/Conatiner';
 import { UserRound } from 'lucide-react';
-import type { Metadata } from 'next'
+import { type Metadata, type ResolvingMetadata } from 'next';
+import { type GetStaticPropsContext } from 'next';
 
-type Props = {
-  params: {
-    id: string;
-  };
-};
+interface PostPageProps {
+  params: { id: string }
+}
 
 interface Post {
   id: string;
@@ -35,7 +34,7 @@ interface Post {
 
 
 // ✅ Генерация метаданных
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata({ params }: PostPageProps): Promise<Metadata> {
   const postId = params.id;
   const response = await apiService.get(`/api/post/${postId}`);
   const post: Post = response.data ?? response;
@@ -52,7 +51,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 // ✅ Основная страница
-export default async function PostsPageDetail({ params }: Props) {
+export default async function PostsPageDetail({ params }: PostPageProps) {
   const postId = params.id;
   const response = await apiService.get(`/api/post/${postId}`);
   const post: Post = response.data ?? response;
