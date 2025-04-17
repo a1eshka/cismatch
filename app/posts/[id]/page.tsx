@@ -31,9 +31,11 @@ type PageParams = {
     id: string;
   };
 };
-export async function generateMetadata({ params }: { params: { id: string } }) {
-  const postId = params.id;
-  const post: Post = await apiService.get(`/api/post/${postId}`);
+export async function generateMetadata({ params }:  PageParams) {
+  const postId = await params.id; // добавляем await
+
+  // Асинхронно загружаем данные поста
+  const post = await getPostById(postId);
 
   return {
     title: `CISMatch - ${post.title}`,
