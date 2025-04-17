@@ -105,7 +105,7 @@ export async function getUserId() {
 }
 
 export async function getAccessToken() {
-    let accessToken = cookies().get('session_access_token')?.value;
+    let accessToken = (await cookies()).get('session_access_token')?.value;
 
     if (!accessToken) {
         accessToken = await handleRefresh();
@@ -115,7 +115,7 @@ export async function getAccessToken() {
 }
 
 export async function getRefreshToken() {
-    let refreshToken = cookies().get('session_refresh_token')?.value;
+    let refreshToken = (await cookies()).get('session_refresh_token')?.value;
     return refreshToken;
 }
 
@@ -139,3 +139,22 @@ export async function getUserData(userId: string | null) {
         return null;
     }
 }
+
+export async function getPostById(id: string) {
+    const cookieStore = await cookies();
+    const token = cookieStore.get('session_access_token')?.value; 
+    const res = await fetch(`${process.env.API_HOST}/api/post/${id}`, {
+      headers: {
+        'Authorization': token ? `Bearer ${token}` : '',
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      cache: 'no-store',
+    });
+  
+    if (!res.ok) {
+      throw new Error('Failed to fetch post');
+    }
+  
+    return res.json();
+  }

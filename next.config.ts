@@ -1,12 +1,11 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from 'next';
 
-const allowedProtocols = ["http", "https"] as const;
+const allowedProtocols = ['http', 'https'] as const;
 type Protocol = (typeof allowedProtocols)[number];
 
-const imageProtocol = process.env.NEXT_PUBLIC_IMAGE_PROTOCOL as Protocol || 'http';
+const imageProtocol = (process.env.NEXT_PUBLIC_IMAGE_PROTOCOL ?? 'http') as Protocol;
 
 const nextConfig: NextConfig = {
-  /* config options here */
   images: {
     domains: ['api.cismatch.ru'],
     remotePatterns: [
@@ -15,9 +14,9 @@ const nextConfig: NextConfig = {
         hostname: process.env.NEXT_PUBLIC_IMAGE_HOST || 'localhost',
         port: process.env.NEXT_PUBLIC_IMAGE_PORT || '8000',
         pathname: '/**',
-      }
-    ]
-  }
+      },
+    ],
+  },
 };
 
 export default nextConfig;

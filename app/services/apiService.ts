@@ -24,7 +24,24 @@ const apiService = {
                 }))
         })
     },
-
+    getPost: async function <T = any>(url: string): Promise<T> {
+        const token = await getAccessToken();
+      
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_HOST}${url}`, {
+          method: 'GET',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          },
+        });
+      
+        if (!response.ok) {
+          throw new Error(`Ошибка при запросе: ${response.statusText}`);
+        }
+      
+        return response.json();
+      },
     
     post: async function(url: string, data: any): Promise<any> {
 

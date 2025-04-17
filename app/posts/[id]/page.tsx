@@ -7,12 +7,7 @@ import CommentsList from '@/components/shared/comments/CommentsList';
 import { Title } from '@/components/shared/title';
 import { Container } from '@/components/shared/Conatiner';
 import { UserRound } from 'lucide-react';
-import { type Metadata, type ResolvingMetadata } from 'next';
-import { type GetStaticPropsContext } from 'next';
-
-interface PostPageProps {
-  params: { id: string }
-}
+import { getPostById } from '@/app/lib/actions';
 
 interface Post {
   id: string;
@@ -31,30 +26,27 @@ interface Post {
     avatar_url?: string;
   };
 }
-
-
-// ✅ Генерация метаданных
-export async function generateMetadata({ params }: PostPageProps): Promise<Metadata> {
+type PageParams = {
+  params: {
+    id: string;
+  };
+};
+export async function generateMetadata({ params }: { params: { id: string } }) {
   const postId = params.id;
-  const response = await apiService.get(`/api/post/${postId}`);
-  const post: Post = response.data ?? response;
-
-  const description =
-    post.body.length > 160 ? post.body.slice(0, 157) + '...' : post.body;
+  const post: Post = await apiService.get(`/api/post/${postId}`);
 
   return {
-    title: `CISMatch — ${post.title}`,
-    description,
-    keywords:
-      'поиск тиммейтов CS2, найти команду CS2, новости cs2, ищу команду, ищу тиммейта faceit, найти тиммейта, найти команду кс',
+    title: `CISMatch - ${post.title}`,
+    description: `${post.body}`,
+    keywords: 'поиск тиммейтов CS2, найти команду CS2, набор в команду CS2, игроки для CS2, тиммейты для матча, CS2 ранги, турниры CS2, киберспорт CS2, клан CS2, партнеры для CS2, играть в CS2, команда для Faceit, поиск сокомандников CS2, новости CS2, обновление CS2, CS2 патч, последние изменения CS2,',
   };
 }
+export default async function PostsPageDetail({ params }: PageParams) {
+  // Получаем postId из params
+  const postId = await params.id; // добавляем await
 
-// ✅ Основная страница
-export default async function PostsPageDetail({ params }: PostPageProps) {
-  const postId = params.id;
-  const response = await apiService.get(`/api/post/${postId}`);
-  const post: Post = response.data ?? response;
+  // Асинхронно загружаем данные поста
+  const post = await getPostById(postId);
 
   return (
     <Container className="flex flex-col my-10">
