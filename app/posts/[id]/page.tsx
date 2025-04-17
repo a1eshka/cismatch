@@ -8,6 +8,7 @@ import { Title } from '@/components/shared/title';
 import { Container } from '@/components/shared/Conatiner';
 import { UserRound } from 'lucide-react';
 import { getPostById } from '@/app/lib/actions';
+import { Metadata } from 'next';
 
 interface Post {
   id: string;
@@ -26,12 +27,13 @@ interface Post {
     avatar_url?: string;
   };
 }
-interface PageParams {
+interface PageProps {
   params: {
     id: string;
   };
+  searchParams?: Record<string, string | string[] | undefined>;
 }
-export async function generateMetadata({ params }:  PageParams) {
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const post = await getPostById(params.id);
 
   return {
@@ -40,7 +42,7 @@ export async function generateMetadata({ params }:  PageParams) {
     keywords: 'поиск тиммейтов CS2, найти команду CS2, набор в команду CS2, игроки для CS2, тиммейты для матча, CS2 ранги, турниры CS2, киберспорт CS2, клан CS2, партнеры для CS2, играть в CS2, команда для Faceit, поиск сокомандников CS2, новости CS2, обновление CS2, CS2 патч, последние изменения CS2,',
   };
 }
-export default async function PostsPageDetail({ params }: PageParams) {
+export default async function PostsPageDetail({ params }: PageProps) {
   const post = await getPostById(params.id);
 
   return (
