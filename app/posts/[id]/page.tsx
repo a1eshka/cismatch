@@ -26,13 +26,13 @@ interface Post {
     avatar_url?: string;
   };
 }
-type Props = {
+interface PageParams {
   params: {
     id: string;
   };
-};
+}
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata({ params }: PageParams): Promise<Metadata> {
   const postId = params.id;
   const response = await apiService.get(`/api/post/${postId}`);
   const post: Post = response.data ?? response;
@@ -44,10 +44,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: `CISMatch — ${post.title}`,
     description: description, // например, первые 160 символов
     keywords:
-      'поиск тиммейтов CS2, найти команду CS2, ...', // ваш список
+      'поиск тиммейтов CS2, найти команду CS2, новости cs2, ищу команду, ищу тиммейта faceit, натий тиммейта, найти команду кс', // ваш список
   }
 }
-export default async function PostsPageDetail({ params }: Props) {
+export default async function PostsPageDetail({ params }: PageParams) {
   const postId = params.id;
   const response = await apiService.get(`/api/post/${postId}`);
   const post: Post = response.data ?? response;
