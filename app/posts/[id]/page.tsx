@@ -26,16 +26,14 @@ interface Post {
     avatar_url?: string;
   };
 }
-type PageParams = {
+interface PageParams {
   params: {
     id: string;
   };
-};
+}
 export async function generateMetadata({ params }:  PageParams) {
-  const postId = await params.id; // добавляем await
-
-  // Асинхронно загружаем данные поста
-  const post = await getPostById(postId);
+  const { id } = await Promise.resolve(params); // Explicitly await params
+  const post = await getPostById(id);
 
   return {
     title: `CISMatch - ${post.title}`,
@@ -44,11 +42,8 @@ export async function generateMetadata({ params }:  PageParams) {
   };
 }
 export default async function PostsPageDetail({ params }: PageParams) {
-  // Получаем postId из params
-  const postId = await params.id; // добавляем await
-
-  // Асинхронно загружаем данные поста
-  const post = await getPostById(postId);
+  const { id } = await Promise.resolve(params); // Explicitly await params
+  const post = await getPostById(id);
 
   return (
     <Container className="flex flex-col my-10">
