@@ -34,8 +34,12 @@ interface PageProps {
   searchParams?: Record<string, string | string[] | undefined>;
 }
 
-export default async function PostsPageDetail({ params }: PageProps) {
-  const post = await getPostById(params.id);
+export default async function PostPageDetail({
+  params
+}: {
+  params: Awaited<{ id: string }> // Явное указание типа
+}) {
+  const post = await getPostById(params.id)
 
   return (
     <Container className="flex flex-col my-10">
