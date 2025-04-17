@@ -8,7 +8,7 @@ import { Title } from '@/components/shared/title';
 import { Container } from '@/components/shared/Conatiner';
 import { UserRound } from 'lucide-react';
 import { getPostById } from '@/app/lib/actions';
-import { Metadata } from 'next';
+import { Metadata, ResolvingMetadata } from 'next';
 
 interface Post {
   id: string;
@@ -33,7 +33,10 @@ interface PageProps {
   };
   searchParams?: Record<string, string | string[] | undefined>;
 }
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata(
+  { params }: PageProps,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
   const post = await getPostById(params.id);
 
   return {
