@@ -32,8 +32,7 @@ interface PageParams {
   };
 }
 export async function generateMetadata({ params }:  PageParams) {
-  const { id } = await Promise.resolve(params); // Explicitly await params
-  const post = await getPostById(id);
+  const post = await getPostById(params.id);
 
   return {
     title: `CISMatch - ${post.title}`,
@@ -42,8 +41,7 @@ export async function generateMetadata({ params }:  PageParams) {
   };
 }
 export default async function PostsPageDetail({ params }: PageParams) {
-  const { id } = await Promise.resolve(params); // Explicitly await params
-  const post = await getPostById(id);
+  const post = await getPostById(params.id);
 
   return (
     <Container className="flex flex-col my-10">
