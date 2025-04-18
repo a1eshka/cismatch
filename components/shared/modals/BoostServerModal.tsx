@@ -9,7 +9,7 @@ import { toast } from 'react-toastify';
 interface BoostServerModalProps {
     isOpen: boolean;
     onClose: () => void;
-    serverId: string;
+    serverId: string | null;
 }
 
 const BoostServerModal: React.FC<BoostServerModalProps> = ({ isOpen, onClose, serverId }) => {

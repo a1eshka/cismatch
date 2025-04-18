@@ -23,6 +23,7 @@ interface EditServerModalProps {
         description: string;
         server_type: ServerType | string; 
     };
+    onServerUpdated: () => Promise<void>;
 }
 
 const EditServerModal: React.FC<EditServerModalProps> = ({ isOpen, onClose, server }) => {

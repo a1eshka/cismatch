@@ -6,12 +6,30 @@ import EditServerModal from '../modals/EditServerModal';
 import { ThirdPartyServerType } from '../servers/ThirdPartyServersList';
 import { Edit2, Flame, Trash2 } from 'lucide-react';
 import BoostServerModal from '../modals/BoostServerModal';
-
+export type ServerType = {
+    id: string;
+    ip: string;
+    port: number;
+    name: string;
+    map: string;
+    published: boolean;
+    is_paid: boolean;
+    is_boosted: boolean;
+     server_type: { id: string | number; title: string };
+    description: string;
+    map_image: string;
+    map_icon: string;
+    ping: string;
+    current_players: number;
+    max_players: string;
+    owner: { id: string; name: string };
+    createdAt: string;
+  };
 const Servers = () => {
-    const [userServers, setUserServers] = useState([]);
+    const [userServers, setUserServers] = useState<ServerType[]>([]);
     const [loading, setLoading] = useState(true); // Состояние для индикатора загрузки
     const [serverToDelete, setServerToDelete] = useState<string | null>(null);
-    const [editingServer, setEditingServer] = useState<ThirdPartyServerType | null>(null);
+    const [editingServer, setEditingServer] = useState<ServerType | null>(null);
     const [serverToBoost, setServerToBoost] = useState<string | null>(null); 
 
     useEffect(() => {
@@ -39,7 +57,7 @@ const Servers = () => {
         setServerToDelete(null);
     };
 
-    const openEditModal = (server: ThirdPartyServerType) => {
+    const openEditModal = (server: ServerType) => {
         setEditingServer(server);
     };
 
@@ -124,7 +142,6 @@ const Servers = () => {
                     isOpen={!!editingServer}
                     onClose={closeEditModal}
                     server={editingServer}
-                    selectedType={editingServer?.server_type?.id ? String(editingServer.server_type.id) : ''}
                     onServerUpdated={fetchUserServers}
                 />
             )}

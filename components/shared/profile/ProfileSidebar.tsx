@@ -1,8 +1,17 @@
 import React from 'react';
 import { CircleUserRound, FileText, Server, BriefcaseBusiness, LogOut } from 'lucide-react';
 
-const Sidebar = ({ activeTab, handleShowProfile, handleShowPosts, handleShowServers, handleShowOrders, isOwnProfile }) => {
-    const getButtonClasses = (tab) => 
+interface SidebarProps {
+    activeTab: string;
+    handleShowProfile: () => void;
+    handleShowPosts: () => void;
+    handleShowServers: () => void;
+    handleShowOrders: () => void;
+    isOwnProfile: boolean;
+  }
+
+const Sidebar: React.FC<SidebarProps> = ({ activeTab, handleShowProfile, handleShowPosts, handleShowServers, handleShowOrders, isOwnProfile }) => {
+    const getButtonClasses = (tab: string) => 
         `flex items-center space-x-3 p-3 rounded-lg cursor-pointer 
         ${activeTab === tab ? 'bg-gray-700/40 text-white' : 'hover:bg-gray-700/30'}`;
 
