@@ -189,12 +189,16 @@ const ProfilePage = () => {
         try {
             const userId = await getUserId();
             const response = await apiService.delete(`/api/auth/user/${userId}/delete-background/`);
-
-            if (response && response.message) {
-                setUserProfile((prev) => ({
-                    ...prev,
-                    background_profile_url: null,
-                }));
+    
+            if (response?.message) {
+                setUserProfile(prev => {
+                    if (!prev) return null; // Обработка случая, когда prev === null
+                    
+                    return {
+                        ...prev,
+                        background_profile_url: null
+                    };
+                });
                 toast.success('Фоновое изображение успешно удалено');
             }
         } catch (error) {
