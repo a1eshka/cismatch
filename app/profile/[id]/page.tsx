@@ -168,11 +168,15 @@ const ProfilePage = () => {
                 formData
             );
 
-            if (response && response.background_profile_url) {
-                setUserProfile((prev) => ({
-                    ...prev,
-                    background_profile_url: response.background_profile_url,
-                }));
+            if (response?.background_profile_url) {
+                setUserProfile(prev => {
+                    if (!prev) return null; // Обработка случая, когда prev === null
+                    
+                    return {
+                        ...prev,
+                        background_profile_url: response.background_profile_url
+                    };
+                });
                 toast.success('Фоновое изображение успешно обновлено');
             }
         } catch (error) {
