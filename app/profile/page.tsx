@@ -142,11 +142,15 @@ const ProfilePage = () => {
                 formData
             );
 
-            if (response && response.background_profile_url) {
-                setUserProfile((prev) => ({
-                    ...prev,
-                    background_profile_url: response.background_profile_url,
-                }));
+            if (response?.background_profile_url) {
+                setUserProfile(prev => {
+                    if (!prev) return null; // Обработка случая, когда prev === null
+                    
+                    return {
+                        ...prev,
+                        background_profile_url: response.background_profile_url
+                    };
+                });
                 toast.success('Фоновое изображение успешно обновлено');
             }
         } catch (error) {
@@ -161,11 +165,15 @@ const ProfilePage = () => {
             const userId = await getUserId();
             const response = await apiService.delete(`/api/auth/user/${userId}/delete-background/`);
 
-            if (response && response.message) {
-                setUserProfile((prev) => ({
-                    ...prev,
-                    background_profile_url: null,
-                }));
+            if (response?.message) {
+                setUserProfile(prev => {
+                    if (!prev) return null; // Обработка случая, когда prev === null
+                    
+                    return {
+                        ...prev,
+                        background_profile_url: null
+                    };
+                });
                 toast.success('Фоновое изображение успешно удалено');
             }
         } catch (error) {
