@@ -7,6 +7,11 @@ import apiService from '@/app/services/apiService';
 import { mutate } from 'swr';
 import { toast } from 'react-toastify';
 
+interface ServerType {
+    id: string | number;
+    title: string;
+  }
+
 interface EditServerModalProps {
     isOpen: boolean;
     onClose: () => void;
@@ -16,7 +21,7 @@ interface EditServerModalProps {
         port: number;
         name: string;
         description: string;
-        server_type: string;
+        server_type: ServerType | string; 
     };
 }
 
