@@ -149,7 +149,7 @@ const InventoryPage = () => {
 
             // Преобразуем объект обратно в массив
             const finalInventory = Object.values(groupedItems);
-            setInventory(finalInventory);
+            setInventory(finalInventory as Item[]);
             setVisibleItems(finalInventory.slice(0, POSTS_PER_PAGE));
         } catch (err: any) {
             //toast.error(`Ошибка загрузки: ${err.message}`);
