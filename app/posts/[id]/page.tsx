@@ -18,6 +18,9 @@ interface Post {
   status?: {
     title: string;
   };
+  type?:{
+    title: string;
+  }
   role?:{
     title: string;
   };
