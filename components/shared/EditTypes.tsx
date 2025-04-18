@@ -47,13 +47,13 @@ const EditPostTypeSelector: React.FC<EditPostTypeSelectorProps> = ({ selectedTyp
             id={type.id}
             name="postType"
             value={type.id}
-            checked={selectedType === type.id} // Если selectedType совпадает с type.id, эта кнопка будет активной
+            checked={selectedType === String(type.id)} // Если selectedType совпадает с type.id, эта кнопка будет активной
             className="hidden peer"
             onChange={() => {}} // Просто предотвращаем изменения
         />
 <label
                             htmlFor={type.id}
-                            className="inline-flex items-center  w-full p-5 border-2 text-gray-500 bg-gray-900 border border-gray-500 rounded-lg cursor-point peer-checked:border-green-600 peer-checked:text-white dark:text-gray-400 dark:bg-gray-800 "
+                            className="inline-flex items-center  w-full p-5 border-2 text-gray-500 bg-gray-900 border-gray-500 rounded-lg cursor-point peer-checked:border-green-600 peer-checked:text-white dark:text-gray-400 dark:bg-gray-800 "
                         >
                              {type.id == '2' ? (
                                 <SearchCheck size={36} className='mr-3'/>

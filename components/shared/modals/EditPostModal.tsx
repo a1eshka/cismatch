@@ -24,8 +24,8 @@ interface EditPostModalProps {
         title: string;
         body: string;
         type?: { id: number | string; title: string } | null;
-        status?: string;
-        role?: string;
+        status?: { id: number | string; title: string } | null;
+        role?: { id: number | string; title: string } | null;
         imageUrl?: string;
         image_url?:string;
     } | null;
@@ -37,9 +37,9 @@ const EditPostModal: React.FC<EditPostModalProps> = ({ isOpen, onClose, post, on
     const [errors, setErrors] = useState<string[]>([]);
     const [dataTitle, setDataTitle] = useState('');
     const [dataBody, setDataBody] = useState('');
-    const [dataType, setDataType] = useState('');
-    const [dataStatus, setDataStatus] = useState('');
-    const [dataRole, setDataRole] = useState('');
+    const [dataType, setDataType] = useState<string | number>('');
+    const [dataStatus, setDataStatus] = useState<string | number>('');
+    const [dataRole, setDataRole] = useState<string | number>('');
     const [dataImages, setDataImages] = useState<File | null>(null);
     const [previewImage, setPreviewImage] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
@@ -48,7 +48,7 @@ const EditPostModal: React.FC<EditPostModalProps> = ({ isOpen, onClose, post, on
         if (post) {
             setDataTitle(post.title);
             setDataBody(post.body);
-            setDataType(post.type.id || '');
+            setDataType(post.type?.id || ''); 
             setDataStatus(post.status?.id || '');
             setDataRole(post.role?.id || '');
             setPreviewImage(post.imageUrl || null);
@@ -81,9 +81,9 @@ const EditPostModal: React.FC<EditPostModalProps> = ({ isOpen, onClose, post, on
         console.log('datatitle', dataTitle)
         formData.append('title', dataTitle);
         formData.append('body', dataBody);
-        formData.append('type', dataType); // <-- Преобразуем в строку, если это объект
-        if (dataStatus) formData.append('status', dataStatus);
-        if (dataRole) formData.append('role', dataRole);
+        formData.append('type', String(dataType)); // <-- Преобразуем в строку, если это объект
+        if (dataStatus) formData.append('status', String(dataStatus));
+        if (dataRole) formData.append('role', String(dataRole));
     // Если изображение было удалено (dataImages == null), отправляем пустое значение
         if (!dataImages && !previewImage && post.image_url) {
             formData.append('images', ''); // Пустое значение для удаления изображения
@@ -115,7 +115,7 @@ const EditPostModal: React.FC<EditPostModalProps> = ({ isOpen, onClose, post, on
             content={
                 <>
                     <EditPostTypeSelector 
-                    selectedType={dataType} />
+                    selectedType={String(dataType)} />
                     <div className="pt-3 pb-6 space-y-4">
                         <Input
                             className="bg-gray-900 border-0"
@@ -131,10 +131,10 @@ const EditPostModal: React.FC<EditPostModalProps> = ({ isOpen, onClose, post, on
                             placeholder="Описание поста"
                         />
 
-                        {parseInt(dataType, 10) === 2 && (
+                        {Number(dataType) === 2 && (
                             <>  
-                                <EditStatusSelector onSelect={setDataStatus} selectedStatus={dataStatus} />
-                                <EditRoleSelector onSelect={setDataRole} selectedRole={dataRole} />
+                                <EditStatusSelector onSelect={setDataStatus} selectedStatus={dataStatus ? String(dataStatus) : ''} />
+                                <EditRoleSelector onSelect={setDataRole} selectedRole={dataRole ? String(dataRole) : ''} />
                             </>
                         )}
 
@@ -169,12 +169,12 @@ const EditPostModal: React.FC<EditPostModalProps> = ({ isOpen, onClose, post, on
                                 </label>
                             </div>
 
-                            {(previewImage || post.image_url) && (
+                            {(previewImage || post?.image_url) && (
     <div className="w-[100px] h-[50px] relative">
         <Image
             fill
             alt="Uploaded image"
-            src={previewImage || post.image_url} // Используем previewImage, если оно есть, иначе image_url из базы данных
+            src={(previewImage ?? post?.image_url) ?? ''}// Используем previewImage, если оно есть, иначе image_url из базы данных
             className="w-full h-full object-cover rounded-xl"
         />
         <button
