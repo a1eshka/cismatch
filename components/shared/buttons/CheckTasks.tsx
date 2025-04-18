@@ -6,8 +6,17 @@ import { toast } from "react-toastify";
 import { CheckCheck } from "lucide-react";
 import useSWR, { mutate } from 'swr';
 
+interface Task {
+    id: number;
+    title: string;
+    description: string;
+    reward: number;
+    isDaily?: boolean;
+    completedToday?: boolean;
+}
+
 const TaskList = () => {
-    const [tasks, setTasks] = useState([]);
+    const [tasks, setTasks] = useState<Task[]>([]);
     const [status, setStatus] = useState("");
     const [completedTasks, setCompletedTasks] = useState<number[]>([]);
     // Получение списка заданий
@@ -79,14 +88,14 @@ const TaskList = () => {
                                 {/* Кнопка для проверки задания */}
                                 <button
                                     onClick={() => handleCheckTask(task.id)}
-                                    disabled={completedTasks?.some(taskItem => taskItem.id === task.id && (!taskItem.isDaily || taskItem.completedToday))}
-                                    className={`mt-4 px-4 py-2 rounded-md transition ${completedTasks?.some(taskItem => taskItem.id === task.id && (!taskItem.isDaily || taskItem.completedToday))
-                                            ? 'border border-gray-500 cursor-not-allowed text-gray-300' // Серый цвет для выполненных
+                                    disabled={completedTasks.includes(task.id)}
+                                    className={`mt-4 px-4 py-2 rounded-md transition ${completedTasks.includes(task.id)
+                                            ? 'border border-gray-500 cursor-not-allowed text-gray-300'
                                             : 'border border-green-500 text-green-500 hover:bg-green-600/20'
                                         }`}
                                 >
-                                    {completedTasks?.some(taskItem => taskItem.id === task.id && (!taskItem.isDaily || taskItem.completedToday))
-                                        ? <div className="flex">Выполнено <CheckCheck size={15} className="ml-1"/></div>
+                                    {completedTasks.includes(task.id)
+                                        ? <div className="flex">Выполнено <CheckCheck size={15} className="ml-1" /></div>
                                         : 'Проверить'}
                                 </button>
                             </div>
