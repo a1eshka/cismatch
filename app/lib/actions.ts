@@ -140,21 +140,3 @@ export async function getUserData(userId: string | null) {
     }
 }
 
-export async function getPostById(id: string) {
-    const cookieStore = await cookies();
-    const token = cookieStore.get('session_access_token')?.value; 
-    const res = await fetch(`${process.env.API_HOST}/api/post/${id}`, {
-      headers: {
-        'Authorization': token ? `Bearer ${token}` : '',
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-      cache: 'no-store',
-    });
-  
-    if (!res.ok) {
-      throw new Error('Failed to fetch post');
-    }
-  
-    return res.json();
-  }
