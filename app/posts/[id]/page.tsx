@@ -9,35 +9,9 @@ import { Container } from '@/components/shared/Conatiner';
 import { UserRound } from 'lucide-react';
 import { Metadata } from 'next';
 
-interface Post {
-  id: string;
-  title: string;
-  body: string;
-  image_url?: string;
-  status?: {
-    title: string;
-  };
-  role?:{
-    title: string;
-  };
-  author: {
-    name?: string;
-    steam_avatar?: string;
-    avatar_url?: string;
-  };
-}
-export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
-  const post: Post = await apiService.get(`/api/post/${params.id}`);
-
-  return {
-    title: `CISMatch - ${post.title}`,
-    description: `${post.body}`,
-    keywords: 'поиск тиммейтов CS2, найти команду CS2, набор в команду CS2, игроки для CS2, тиммейты для матча, CS2 ранги, турниры CS2, киберспорт CS2, клан CS2, партнеры для CS2, играть в CS2, команда для Faceit, поиск сокомандников CS2, новости CS2, обновление CS2, CS2 патч, последние изменения CS2,',
-  };
-}
 const PostsPageDetail = async ({ params }: { params: { id: string } }) => {
   // Асинхронно загружаем данные поста
-  const post: Post = await apiService.get(`/api/post/${params.id}`);
+  const post = await apiService.get(`/api/post/${params.id}`);
 
   return (
     <Container className="flex flex-col my-10">

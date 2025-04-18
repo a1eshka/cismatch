@@ -41,7 +41,7 @@ export async function handleRefresh() {
 }
 
 export async function handleLogin(userId: string, accessToken: string, refreshToken: string) {
-    const cookieStore = cookies(); // Используйте cookies() асинхронно
+    const cookieStore = await cookies(); // Используйте cookies() асинхронно
 
     cookieStore.set('session_userid', userId, {
       httpOnly: true,
@@ -66,7 +66,7 @@ export async function handleLogin(userId: string, accessToken: string, refreshTo
   }
 
   export async function resetAuthCookies() {
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
 
     cookieStore.set('session_userid', '', {
         expires: new Date(0), // Устанавливаем срок действия в прошлом
@@ -139,4 +139,3 @@ export async function getUserData(userId: string | null) {
         return null;
     }
 }
-
