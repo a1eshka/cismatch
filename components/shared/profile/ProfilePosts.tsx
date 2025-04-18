@@ -14,15 +14,15 @@ interface Post {
     title: string;
     body: string;
     type?: { id: number | string; title: string } | null; // ✅ Убедись, что type - это объект с id
-    status?: string;
-    role?: string;
+    status?: { id: number | string; title: string } | null;
+    role?: { id: number | string; title: string } | null;
     imageUrl?: string;
 }
 
 const Posts = () => {
-    const [userPosts, setUserPosts] = useState([]);
+    const [userPosts, setUserPosts] = useState<Post[]>([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [postToDelete, setPostToDelete] = useState(null);
+    const [postToDelete, setPostToDelete] = useState<string | null>(null);
     const [editingPost, setEditingPost] = useState<Post | null>(null);
 
     useEffect(() => {
@@ -44,7 +44,7 @@ const Posts = () => {
         }
     };
 
-    const openDeleteModal = (postId) => {
+    const openDeleteModal = (postId: string) => {
         setPostToDelete(postId);
     };
 
@@ -52,7 +52,7 @@ const Posts = () => {
         setPostToDelete(null);
     };
 
-    const openEditModal = (post) => {
+    const openEditModal = (post: Post) => {
         setEditingPost(post);
     };
 
@@ -74,7 +74,7 @@ const Posts = () => {
                                 <div key={post.id} className="bg-gray-800 p-4 rounded-lg relative">
                                     <h4 className="text-lg font-semibold">{post.title}</h4>
                                     <p className="text-gray-400 text-sm">{post.body.length > 100 ? `${post.body.slice(0, 100)}...` : post.body}</p>
-                                    <p className="text-gray-300/30 text-xs p-1.5 border border-gray-300/20 w-max rounded-full mt-2">{post.type.title}</p>
+                                    <p className="text-gray-300/30 text-xs p-1.5 border border-gray-300/20 w-max rounded-full mt-2">{post.type?.title}</p>
                                     <button
                                         onClick={() => openEditModal(post)}
                                         className="mt-3 bg-gray-600/20 hover:bg-gray-700/20 text-gray-600 py-1 px-3 rounded text-sm mr-2"
