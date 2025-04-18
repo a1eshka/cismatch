@@ -1,7 +1,7 @@
 import apiService from '@/app/services/apiService';
 import { useState } from 'react';
 
-const ToggleMembershipButton = ({ teamId, initialIsMember }) => {
+const ToggleMembershipButton = ({ teamId, initialIsMember }: { teamId: string; initialIsMember: boolean }) => {
     const [isMember, setIsMember] = useState(initialIsMember);
     const [loading, setLoading] = useState(false);
 
