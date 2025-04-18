@@ -7,6 +7,7 @@ import CommentsList from '@/components/shared/comments/CommentsList';
 import { Title } from '@/components/shared/title';
 import { Container } from '@/components/shared/Conatiner';
 import { UserRound } from 'lucide-react';
+import { Metadata } from 'next';
 
 interface Post {
   id: string;
@@ -25,7 +26,7 @@ interface Post {
     avatar_url?: string;
   };
 }
-export async function generateMetadata({ params }: { params: { id: string } }) {
+export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
   const post: Post = await apiService.get(`/api/post/${params.id}`);
 
   return {
