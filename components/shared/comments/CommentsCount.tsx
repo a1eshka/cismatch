@@ -4,7 +4,7 @@ import useSWR from 'swr';
 import { FaComment } from 'react-icons/fa';
 import apiService from '@/app/services/apiService';
 
-const fetcher = (url) => apiService.get(url).then(res => res.data);
+const fetcher = (url: string) => apiService.get(url).then(res => res.data);
 
 interface Props {
   postId: string;

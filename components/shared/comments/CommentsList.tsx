@@ -4,9 +4,9 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import React from 'react';
 import useSWR from 'swr';
 
-const fetcher = (url) => apiService.get(url).then(res => res.data);
+const fetcher = (url: string) => apiService.get(url).then(res => res.data);
 
-const CommentsList = ({ postId }) => {
+const CommentsList = ({ postId }: { postId: string }) => {
   const { data: comments, error } = useSWR(`/api/post/${postId}/comments`, fetcher);
 
   if (!comments) {
@@ -21,7 +21,7 @@ const CommentsList = ({ postId }) => {
   if (error) {
     return <div>Ошибка: {error.message}</div>;
   }
-  const isToday = (dateString) => {
+  const isToday = (dateString: string) => {
     // Преобразуем строку даты в массив
     const [day, month, year] = dateString.split('.').map(Number);
 
