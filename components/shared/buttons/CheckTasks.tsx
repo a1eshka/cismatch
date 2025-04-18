@@ -38,7 +38,7 @@ const TaskList = () => {
     }, []);
 
     // Функция для проверки выполнения задания
-    const handleCheckTask = async (taskId) => {
+    const handleCheckTask = async (taskId: number) => {
         try {
             const response = await apiService.post("/api/raffles/tasks/check/", JSON.stringify({ taskId }));
             if (response.success) {
