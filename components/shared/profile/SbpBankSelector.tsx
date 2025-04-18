@@ -2,9 +2,20 @@ import apiService from "@/app/services/apiService";
 import { useEffect, useState } from "react";
 
 
-const SbpBankSelector = ({ onSelect }) => {
-    const [banks, setBanks] = useState([]);
+interface Bank {
+    id: string;
+    name: string;
+    logo?: string;
+  }
+  
+  interface SbpBankSelectorProps {
+    onSelect: (bank: Bank) => void;
+  }
+
+const SbpBankSelector: React.FC<SbpBankSelectorProps> = ({ onSelect }) => {
+    const [banks, setBanks] = useState<Bank[]>([]);
     const [loading, setLoading] = useState(true);
+    const [selectedId, setSelectedId] = useState<string>("");
 
     useEffect(() => {
         const fetchBanks = async () => {
@@ -19,6 +30,13 @@ const SbpBankSelector = ({ onSelect }) => {
         };
         fetchBanks();
     }, []);
+    const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const bank = banks.find((b) => b.id === e.target.value);
+        if (bank) {
+          setSelectedId(bank.id);
+          onSelect(bank);
+        }
+      };
 
     return (
         <div>
@@ -28,11 +46,12 @@ const SbpBankSelector = ({ onSelect }) => {
             ) : (
                 <select
                     className="p-2 border rounded bg-gray-900 text-white"
-                    onChange={(e) => onSelect(e.target.value)}
+                    onChange={handleChange}
+                    value={selectedId}
                 >
                     <option value="">Выберите банк</option>
                     {banks.map((bank) => (
-                        <option key={bank.bank_id} value={bank.bank_id}>
+                        <option key={bank.id} value={bank.id}>
                             {bank.name}
                         </option>
                     ))}
