@@ -134,7 +134,6 @@ const LoginModal = () => {
                 <CustomButton
                     label="Войти"
                     onClick={handleSubmit(submitLogin)} // Валидация перед вызовом submitLogin
-                    disabled={loading}
                     className="w-full" // Растягиваем кнопку на всю ширину
                 />
                 <SteamLoginButton />

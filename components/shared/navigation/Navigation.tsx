@@ -1,13 +1,17 @@
 'use client'; // Помечаем как клиентский компонент
 
 import { cn } from "@/lib/utils";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, ReactNode } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Container } from "@/components/shared/Conatiner";
 import { House, Server, Swords, Users, UserSearch, Menu, X, Crown } from "lucide-react";
 import UserNav from "./UserNav";
-
+interface NavLinkProps {
+    href: string;
+    icon: React.ElementType;
+    children: ReactNode;
+  }
 interface HeaderProps {
     userId: string | null;
     userData: {
@@ -19,7 +23,7 @@ interface HeaderProps {
 }
 
 // Компонент для навигационных ссылок
-const NavLink = ({ href, icon: Icon, children }) => {
+const NavLink: React.FC<NavLinkProps> = ({ href, icon: Icon, children }) => {
     const pathname = usePathname();
     const isActive = pathname === href;
 
