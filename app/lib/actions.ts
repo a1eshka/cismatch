@@ -3,42 +3,42 @@
 import { cookies } from 'next/headers';
 
 export async function handleRefresh() {
-
-    const refreshToken = await getRefreshToken();
-
-    const token = await fetch(`${process.env.NEXT_PUBLIC_API_HOST}/api/auth/token/refresh/`, {
+    try {
+      const refreshToken = await getRefreshToken();
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_HOST}/api/auth/token/refresh/`, {
         method: 'POST',
-        body: JSON.stringify({
-            refresh: refreshToken
-        }),
+        body: JSON.stringify({ refresh: refreshToken }),
         headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
         }
-    }) 
-        .then(response => response.json())
-        .then((json) => {
-            
-            if (json.access) {
-                cookies().set('session_access_token', json.access, {
-                    httpOnly: true,
-                    secure: process.env.NODE_ENV === 'production',
-                    maxAge: 60* 60, //60 min
-                    path: '/'
-                });
-            
-                return json.access;
-            } else {
-                resetAuthCookies();
-            }
-        })
-        .catch((error) => {
-
-            resetAuthCookies();
-        })
-
-    return token;
-}
+      });
+  
+      const json = await response.json();
+  
+      if (json.access) {
+        // Получаем экземпляр cookies с await
+        const cookieStore = await cookies();
+        
+        // Устанавливаем новый access token
+        cookieStore.set('session_access_token', json.access, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === 'production',
+          maxAge: 60 * 60, // 60 минут
+          path: '/',
+          sameSite: 'strict'
+        });
+  
+        return json.access;
+      } else {
+        await resetAuthCookies();
+        return null;
+      }
+    } catch (error) {
+      await resetAuthCookies();
+      return null;
+    }
+  }
 
 export async function handleLogin(userId: string, accessToken: string, refreshToken: string) {
     const cookieStore = await cookies(); // Используйте cookies() асинхронно
