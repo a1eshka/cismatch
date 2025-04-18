@@ -5,7 +5,18 @@ import React from 'react';
 import useSWR from 'swr';
 
 const fetcher = (url: string) => apiService.get(url).then(res => res.data);
-
+interface Comment {
+  id: number | string;
+  text: string;
+  created_at: string;
+  formatted_date: string;
+  formatted_time: string;
+  author: {
+    name: string;
+    steam_avatar?: string;
+    avatar_url?: string;
+  };
+}
 const CommentsList = ({ postId }: { postId: string }) => {
   const { data: comments, error } = useSWR(`/api/post/${postId}/comments`, fetcher);
 
@@ -36,7 +47,7 @@ const CommentsList = ({ postId }: { postId: string }) => {
       today.getMonth() === commentDate.getMonth() &&
       today.getDate() === commentDate.getDate();
   };
-  const sortedComments = comments.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+  const sortedComments = comments.sort((a: Comment, b: Comment) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
   return (
     <>
       <div>
@@ -44,7 +55,7 @@ const CommentsList = ({ postId }: { postId: string }) => {
 
         <div>
 
-          {sortedComments.map(comment => (
+          {sortedComments.map((comment: Comment) => (
             <div key={comment.id}>
               <div className="flex items-center">
                 <Avatar className="h-7 w-7">
