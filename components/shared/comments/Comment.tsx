@@ -12,7 +12,7 @@ import useSWR, { mutate } from 'swr';
 import useLoginModal from '@/app/hooks/useLoginModal'; // Импортируем хук для модального окна авторизации
 import { getUserId } from '@/app/lib/actions'; // Импортируем функцию для проверки авторизации
 
-const AddComment = ({ postId }) => {
+const AddComment = ({ postId }: { postId: string }) => {
   const [errors, setErrors] = useState<string[]>([]);
   const [commentBody, setCommentBody] = useState('');
   const loginModal = useLoginModal(); // Хук для управления модальным окном авторизации
