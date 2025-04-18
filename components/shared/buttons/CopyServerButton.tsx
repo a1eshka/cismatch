@@ -3,7 +3,7 @@ import { Copy, CopyCheck } from 'lucide-react'; // Импортируем ико
 import { toast } from 'react-toastify';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
-const CopyButton = ({ textToCopy }) => {
+const CopyButton = ({ textToCopy }: { textToCopy: string }) => {
     const [isCopied, setIsCopied] = useState(false);
 
     const handleCopy = async () => {
