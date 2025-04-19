@@ -38,11 +38,11 @@ interface UserInfo {
 }
 interface RaffleCardProps {
     raffle: Raffle;
-    handleBuyClick: (raffleId: string) => void;
+    handleBuyClick: (raffle: Raffle) => void;
     userId: string | null;
     loginModal: () => void;
     currentTime: number; // Предположительно это Date.now()
-  }
+}
 
 const RafflesPage = () => {
     const [activeRaffles, setActiveRaffles] = useState<Raffle[]>([]);
@@ -241,7 +241,7 @@ const RafflesPage = () => {
                             raffle={raffle}
                             handleBuyClick={handleBuyClick}
                             userId={userId}
-                            loginModal={loginModal}
+                            loginModal={loginModal.open}
                             currentTime={currentTime}
                         />
                     ))}
@@ -263,7 +263,7 @@ const RafflesPage = () => {
                                         raffle={raffle}
                                         handleBuyClick={handleBuyClick}
                                         userId={userId}
-                                        loginModal={loginModal}
+                                        loginModal={loginModal.open}
                                         currentTime={currentTime}
                                     />
                                 ))}
@@ -331,14 +331,14 @@ const RaffleCard: React.FC<RaffleCardProps> = ({ raffle, handleBuyClick, userId,
                 }} />
                 <div
                     className={`absolute top-0 left-0 w-full h-full bg-gradient-to-b ${raffle.price_in_tickets <= 10
-                            ? 'bg-gray-400 from-gray-500'
-                            : raffle.price_in_tickets <= 30
-                                ? 'bg-blue-400 from-blue-700'
-                                : raffle.price_in_tickets <= 40
-                                    ? 'bg-blue-500 from-blue-800'
-                                    : raffle.price_in_tickets <= 60
-                                        ? 'bg-purple-500 from-purple-800'
-                                        : 'bg-red-500 from-red-700'
+                        ? 'bg-gray-400 from-gray-500'
+                        : raffle.price_in_tickets <= 30
+                            ? 'bg-blue-400 from-blue-700'
+                            : raffle.price_in_tickets <= 40
+                                ? 'bg-blue-500 from-blue-800'
+                                : raffle.price_in_tickets <= 60
+                                    ? 'bg-purple-500 from-purple-800'
+                                    : 'bg-red-500 from-red-700'
                         } to-transparent`}
                 ></div>
                 {raffle.skin_description ? <div className='absolute bottom-0 text-white/40 z-10 text-sm'>{raffle.skin_description}</div> : ''}
@@ -381,34 +381,40 @@ const RaffleCard: React.FC<RaffleCardProps> = ({ raffle, handleBuyClick, userId,
                 {/* Победитель */}
                 {raffle.is_drawn && raffle.winner && (
                     <Link href={`/profile/${raffle.winner_id}`}>
-                    <div className="flex items-center p-2 rounded-lg mb-2 text-green-500 bg-green-100 border border-green-500">
-                        <Crown size={18} className="text-green-500 mr-2" />
-                        <div className="flex items-center">
-                            Победитель:
-                            <img src={raffle.winner_steam_avatar} className="w-6 ml-2 rounded-xl" />
-                            <span className="text-green-500 font-bold ml-1">{raffle.winner}</span>
+                        <div className="flex items-center p-2 rounded-lg mb-2 text-green-500 bg-green-100 border border-green-500">
+                            <Crown size={18} className="text-green-500 mr-2" />
+                            <div className="flex items-center">
+                                Победитель:
+                                {raffle.winner_steam_avatar && (
+                                    <img
+                                        src={raffle.winner_steam_avatar || `${process.env.NEXT_PUBLIC_API_HOST}/media/logos/logo.png`}
+                                        alt={`${raffle.winner} avatar`}
+                                        className="w-6 h-6 ml-2 rounded-xl object-cover"
+                                    />
+                                )}
+                                <span className="text-green-500 font-bold ml-1">{raffle.winner}</span>
+                            </div>
                         </div>
-                    </div>
                     </Link>
                 )}
 
-{/* Кнопка покупки */}
-{!raffle.is_drawn && (
-    <button
-        className={`w-full py-2 rounded-md text-white font-bold text-sm transition 
+                {/* Кнопка покупки */}
+                {!raffle.is_drawn && (
+                    <button
+                        className={`w-full py-2 rounded-md text-white font-bold text-sm transition 
         ${raffle.price_in_tickets === 0 && raffle.user_tickets === 1
-            ? 'bg-gray-400 cursor-not-allowed'
-            : 'bg-green-500 hover:bg-green-600 transform transition-all duration-300 hover:scale-105'}`}
-        disabled={raffle.price_in_tickets === 0 && raffle.user_tickets === 1}
-        onClick={() => handleBuyClick(raffle)}
-    >
-        {raffle.price_in_tickets === 0
-            ? (raffle.user_tickets === 1
-                ? 'Вы уже участвуете'
-                : 'Участвовать')
-            : `Купить за ${raffle.price_in_tickets} ₽`}
-    </button>
-)}
+                                ? 'bg-gray-400 cursor-not-allowed'
+                                : 'bg-green-500 hover:bg-green-600 transform transition-all duration-300 hover:scale-105'}`}
+                        disabled={raffle.price_in_tickets === 0 && raffle.user_tickets === 1}
+                        onClick={() => handleBuyClick(raffle)}
+                    >
+                        {raffle.price_in_tickets === 0
+                            ? (raffle.user_tickets === 1
+                                ? 'Вы уже участвуете'
+                                : 'Участвовать')
+                            : `Купить за ${raffle.price_in_tickets} ₽`}
+                    </button>
+                )}
 
             </div>
         </div>
