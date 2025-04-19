@@ -6,6 +6,7 @@ import Modal from '../modals/Modal';
 import apiService from '@/app/services/apiService';
 import { mutate } from 'swr';
 import { toast } from 'react-toastify';
+import { ThirdPartyServerType } from '../servers/ThirdPartyServersList';
 
 interface ServerType {
     id: string | number;
@@ -15,14 +16,7 @@ interface ServerType {
 interface EditServerModalProps {
     isOpen: boolean;
     onClose: () => void;
-    server: {
-        id: string;
-        ip: string;
-        port: number;
-        name: string;
-        description: string;
-        server_type: ServerType | string; 
-    };
+    server: ThirdPartyServerType;
     onServerUpdated: () => Promise<void>;
 }
 

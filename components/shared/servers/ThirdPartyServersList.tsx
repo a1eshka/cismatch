@@ -23,7 +23,7 @@ export type ThirdPartyServerType = {
   published: boolean;
   is_paid: boolean;
   is_boosted: boolean;
-  server_type: { title: string };
+  server_type: {id:string | number, title: string };
   description: string;
   map_image: string;
   map_icon: string;
@@ -55,6 +55,24 @@ const ThirdPartyServerList = () => {
     };
     fetchUserId();
   }, []);
+
+  // Функция для получения серверов пользователя
+  const fetchUserServers = async () => {
+    try {
+      const response = await apiService.get(`/api/servers/third-party/user/?user_id=${userId}`);
+      if (response.data) {
+        mutate('/api/servers/third-party/', response.data); // Обновляем список серверов
+      }
+    } catch (error) {
+      console.error('Ошибка при получении серверов:', error);
+      toast.error('Не удалось получить серверы');
+    }
+  };
+
+  const handleEdit = (server: ThirdPartyServerType) => {
+    setServerToEdit(server);
+  };
+
   if (isLoading) {
     return (
       <div role="status" className="max-w-sm animate-pulse">
@@ -71,10 +89,6 @@ const ThirdPartyServerList = () => {
     return <div>Error loading servers: {error.message}</div>;
   }
 
-  const handleEdit = (server: ThirdPartyServerType) => {
-    console.log("Редактирование сервера:", server);
-    setServerToEdit(server);
-  };
 
 
   const sortedServers = [...servers].sort((a, b) => {
@@ -216,6 +230,7 @@ const ThirdPartyServerList = () => {
           isOpen={!!serverToDelete}
           onClose={() => setServerToDelete(null)}
           serverId={serverToDelete}
+          onServerDeleted={fetchUserServers}
         />)}
       {serverToBoost && (
         <BoostServerModal
@@ -229,6 +244,7 @@ const ThirdPartyServerList = () => {
           isOpen={!!serverToEdit}
           onClose={() => setServerToEdit(null)}
           server={serverToEdit}
+          onServerUpdated={fetchUserServers}
         />
       )}
     </div>

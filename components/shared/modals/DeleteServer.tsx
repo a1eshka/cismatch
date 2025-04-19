@@ -11,6 +11,7 @@ interface DeleteServerModalProps {
   isOpen: boolean;
   onClose: () => void;
   serverId: string;
+  onServerDeleted: () => Promise<void>; 
 }
 
 const DeleteServerModal: React.FC<DeleteServerModalProps> = ({ isOpen, onClose, serverId }) => {
