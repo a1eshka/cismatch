@@ -36,6 +36,13 @@ interface Raffle {
 interface UserInfo {
     balance: number;
 }
+interface RaffleCardProps {
+    raffle: Raffle;
+    handleBuyClick: (raffleId: string) => void;
+    userId: string | null;
+    loginModal: () => void;
+    currentTime: number; // Предположительно это Date.now()
+  }
 
 const RafflesPage = () => {
     const [activeRaffles, setActiveRaffles] = useState<Raffle[]>([]);
