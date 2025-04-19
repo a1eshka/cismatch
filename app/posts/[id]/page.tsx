@@ -8,7 +8,7 @@ import { Title } from '@/components/shared/title';
 import { Container } from '@/components/shared/Conatiner';
 import { UserRound } from 'lucide-react';
 import { Metadata } from 'next';
-import { GetServerSideProps } from 'next';
+
 
 interface Post {
   id: string;
@@ -30,16 +30,6 @@ interface Post {
     avatar_url?: string;
   };
 }
-export const getServerSideProps: GetServerSideProps = async ({ params }) => {
-  const { id } = params as { id: string };
-  const post: Post = await apiService.get(`/api/post/${id}`);
-
-  return {
-    props: {
-      post,
-    },
-  };
-};
 
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
   const post: Post = await apiService.get(`/api/post/${params.id}`);
@@ -50,7 +40,10 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
     keywords: 'поиск тиммейтов CS2, найти команду CS2, набор в команду CS2, игроки для CS2, тиммейты для матча, CS2 ранги, турниры CS2, киберспорт CS2, клан CS2, партнеры для CS2, играть в CS2, команда для Faceit, поиск сокомандников CS2, новости CS2, обновление CS2, CS2 патч, последние изменения CS2,',
   };
 }
-const PostsPageDetail = ({ post }: { post: Post }) => {
+const PostsPageDetail = async ({ params }: { params: { id: string } }) => {
+  const post: Post = await apiService.get(`/api/post/${params.id}`);
+
+
   return (
     <Container className="flex flex-col my-10">
       <div className="flex justify-center">
