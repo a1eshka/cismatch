@@ -33,10 +33,8 @@ interface Post {
 
 type Params = Promise<{ id: string }>
 
-export async function generateMetadata(props: { params: Params }): Promise<Metadata> {
-  const params = use(props.params);
-  const id = params.id;
-  const post: Post = await apiService.get(`/api/post/${id}`);
+export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
+  const post: Post = await apiService.get(`/api/post/${params.id}`);
 
   return {
     title: `CISMatch - ${post.title}`,
@@ -44,10 +42,8 @@ export async function generateMetadata(props: { params: Params }): Promise<Metad
     keywords: 'поиск тиммейтов CS2, найти команду CS2, набор в команду CS2, игроки для CS2, тиммейты для матча, CS2 ранги, турниры CS2, киберспорт CS2, клан CS2, партнеры для CS2, играть в CS2, команда для Faceit, поиск сокомандников CS2, новости CS2, обновление CS2, CS2 патч, последние изменения CS2,',
   };
 }
-const PostsPageDetail = async (props: { params: Params }) => {
-  const params = use(props.params);
-  const id = params.id;
-  const post: Post = await apiService.get(`/api/post/${id}`);
+const PostsPageDetail = async ({ params }: { params: { id: string } }) => {
+  const post: Post = await apiService.get(`/api/post/${params.id}`);
 
 
   return (
