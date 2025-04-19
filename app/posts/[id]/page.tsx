@@ -8,7 +8,6 @@ import { Title } from '@/components/shared/title';
 import { Container } from '@/components/shared/Conatiner';
 import { UserRound } from 'lucide-react';
 import { Metadata } from 'next';
-import { use } from 'react';
 
 interface Post {
   id: string;
