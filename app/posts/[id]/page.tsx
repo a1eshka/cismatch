@@ -31,8 +31,6 @@ interface Post {
   };
 }
 
-type Params = Promise<{ id: string }>
-
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
   const post: Post = await apiService.get(`/api/post/${params.id}`);
 
