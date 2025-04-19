@@ -60,7 +60,7 @@ const Header = ({ userId, userData }: HeaderProps) => {
     }, []);
 
     return (
-        <header className="bg-gray-800/90 backdrop-blur-sm shadow-lg rounded-xl">
+        <header className="bg-gray-950/90 backdrop-blur-sm shadow-lg rounded-xl">
             <Container className="flex items-center justify-between py-4 px-4 md:px-0">
                 {/* Левая часть */}
                 <div className="flex items-center gap-4">
