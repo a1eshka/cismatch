@@ -284,7 +284,7 @@ const RafflesPage = () => {
     );
 };
 
-const RaffleCard = ({ raffle, handleBuyClick, userId, loginModal, currentTime }) => {
+const RaffleCard: React.FC<RaffleCardProps> = ({ raffle, handleBuyClick, userId, loginModal, currentTime }) => {
     const getRaffleTimeInfo = (start_time: string, end_time: string) => {
         const now = currentTime;
         const start = new Date(start_time).getTime();
