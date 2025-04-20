@@ -30,13 +30,13 @@ interface Post {
   };
 }
 
-// Для Next.js 15.3.1 используем этот интерфейс
+// Правильный тип для параметров страницы в Next.js 15
 interface PageParams {
   params: { id: string };
   searchParams?: Record<string, string | string[] | undefined>;
 }
 
-export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
+export async function generateMetadata({ params }: PageParams): Promise<Metadata> {
   try {
     const post = await apiService.get(`/api/post/${params.id}`);
     return {
@@ -52,7 +52,7 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
   }
 }
 
-const PostsPageDetail = async ({ params }: { params: { id: string } }) => {
+export default async function PostPage({ params }: PageParams) {
   try {
     const post = await apiService.get(`/api/post/${params.id}`);
 
@@ -75,7 +75,8 @@ const PostsPageDetail = async ({ params }: { params: { id: string } }) => {
               <img 
                 className="rounded-lg mt-5 w-full h-auto" 
                 src={post.image_url} 
-                alt="Post image" 
+                alt={`Изображение для ${post.title}`} 
+                loading="lazy"
               />
             )}
             
@@ -103,8 +104,7 @@ const PostsPageDetail = async ({ params }: { params: { id: string } }) => {
       </Container>
     );
   } catch (error) {
+    console.error('Failed to load post:', error);
     return notFound();
   }
-};
-
-export default PostsPageDetail;
+}
