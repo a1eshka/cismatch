@@ -30,7 +30,14 @@ interface Post {
   };
 }
 
-export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
+// Правильный интерфейс для параметров страницы
+interface PageProps {
+  params: {
+    id: string;
+  };
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   try {
     const post = await apiService.get(`/api/post/${params.id}`);
     return {
@@ -46,7 +53,7 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
   }
 }
 
-const PostsPageDetail = async ({ params }: { params: { id: string } }) => {
+const PostsPageDetail = async ({ params }: PageProps) => {
   try {
     const post = await apiService.get(`/api/post/${params.id}`);
 
