@@ -1,11 +1,10 @@
 'use client';
 import apiService from '@/app/services/apiService';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import React from 'react';
 import useSWR from 'swr';
-import { UserRound } from 'lucide-react';
 
 const fetcher = (url: string) => apiService.get(url).then(res => res.data);
-
 interface Comment {
   id: number | string;
   text: string;
@@ -18,81 +17,65 @@ interface Comment {
     avatar_url?: string;
   };
 }
-
 const CommentsList = ({ postId }: { postId: string }) => {
-  const { data: comments, error, isLoading } = useSWR<Comment[]>(`/api/post/${postId}/comments`, fetcher);
+  const { data: comments, error } = useSWR(`/api/post/${postId}/comments`, fetcher);
 
-  if (isLoading) {
+  if (!comments) {
     return (
-      <div className="flex justify-center mt-4">
-        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-gray-400"></div>
+      <div role="status">
+        <svg aria-hidden="true" className="w-8 h-8 mt-5 text-gray-300/50 animate-spin dark:text-gray-600 fill-gray-600/50" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor" /><path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill" /></svg>
+        <span className="sr-only">Loading...</span>
       </div>
     );
   }
 
   if (error) {
-    return (
-      <div className="text-center text-gray-500 mt-4">
-        Не удалось загрузить комментарии
-      </div>
-    );
+    return <div>Ошибка: {error.message}</div>;
   }
-
-  if (!comments || comments.length === 0) {
-    return (
-      <div className="text-center text-gray-500 mt-4">
-        Пока нет комментариев. Будьте первым!
-      </div>
-    );
-  }
-
   const isToday = (dateString: string) => {
+    // Преобразуем строку даты в массив
     const [day, month, year] = dateString.split('.').map(Number);
-    const commentDate = new Date(year, month - 1, day);
+
+    // Создаём объект Date для даты поста
+    const commentDate = new Date(year, month - 1, day); // Месяцы в JavaScript начинаются с 0
+
+    // Получаем сегодняшнюю дату
     const today = new Date();
-    
-    return (
-      today.getFullYear() === commentDate.getFullYear() &&
+
+    // Сравниваем только год, месяц и день
+    return today.getFullYear() === commentDate.getFullYear() &&
       today.getMonth() === commentDate.getMonth() &&
-      today.getDate() === commentDate.getDate()
-    );
+      today.getDate() === commentDate.getDate();
   };
-
-  const sortedComments = [...comments].sort(
-    (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-  );
-
+  const sortedComments = comments.sort((a: Comment, b: Comment) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
   return (
-    <div className="mt-6 space-y-4">
-      <h3 className="text-lg font-medium">Комментарии ({comments.length})</h3>
-      
-      {sortedComments.map((comment) => (
-        <div key={comment.id} className="p-4 bg-gray-800/50 rounded-lg">
-          <div className="flex items-center gap-2">
-            <Avatar className="h-8 w-8">
-              <AvatarImage
-                src={comment.author.steam_avatar || comment.author.avatar_url}
-                alt={comment.author.name}
-              />
-              <AvatarFallback className="bg-gray-600">
-                <UserRound className="h-4 w-4" />
-              </AvatarFallback>
-            </Avatar>
-            <div className="text-sm text-gray-300">
-              <span className="font-medium">{comment.author.name}</span>
-              <span className="text-gray-400 ml-2">
-                {isToday(comment.formatted_date) 
-                  ? 'сегодня' 
-                  : comment.formatted_date} в {comment.formatted_time}
-              </span>
+    <>
+      <div>
+        <h3 className='my-3'>Комментарии:</h3>
+
+        <div>
+
+          {sortedComments.map((comment: Comment) => (
+            <div key={comment.id}>
+              <div className="flex items-center">
+                <Avatar className="h-7 w-7">
+                  <AvatarImage
+                    src={comment.author.steam_avatar || comment.author.avatar_url}
+                    alt={comment.author.name}
+                  />
+                </Avatar>
+                <div className="ml-2 text-gray-500">
+                  {comment.author.name} {isToday(comment.formatted_date) ? 'сегодня' : comment.formatted_date} в {comment.formatted_time}:
+                </div>
+              </div>
+              <div className="bg-gray-400/25 rounded-lg my-3 p-3">
+                {comment.text}
+              </div>
             </div>
-          </div>
-          <div className="mt-2 text-gray-200 whitespace-pre-line">
-            {comment.text}
-          </div>
+          ))}
         </div>
-      ))}
-    </div>
+      </div>
+    </>
   );
 };
 
