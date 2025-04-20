@@ -1,4 +1,3 @@
-
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import apiService from '@/app/services/apiService';
@@ -9,7 +8,6 @@ import { Container } from '@/components/shared/Conatiner';
 import { UserRound } from 'lucide-react';
 import { Metadata } from 'next';
 
-
 interface Post {
   id: string;
   title: string;
@@ -18,10 +16,10 @@ interface Post {
   status?: {
     title: string;
   };
-  type?:{
+  type?: {
     title: string;
-  }
-  role?:{
+  };
+  role?: {
     title: string;
   };
   author: {
@@ -31,63 +29,77 @@ interface Post {
   };
 }
 
-export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
-  const { id } = await params;
-  const post: Post = await apiService.get(`/api/post/${id}`);
-
-  return {
-    title: `CISMatch - ${post.title}`,
-    description: `${post.body}`,
-    keywords: 'поиск тиммейтов CS2, найти команду CS2, набор в команду CS2, игроки для CS2, тиммейты для матча, CS2 ранги, турниры CS2, киберспорт CS2, клан CS2, партнеры для CS2, играть в CS2, команда для Faceit, поиск сокомандников CS2, новости CS2, обновление CS2, CS2 патч, последние изменения CS2,',
-  };
+export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
+  try {
+    const post: Post = await apiService.get(`/api/post/${params.id}`);
+    
+    return {
+      title: `CISMatch - ${post.title}`,
+      description: `${post.body}`,
+      keywords: 'поиск тиммейтов CS2, найти команду CS2, набор в команду CS2, игроки для CS2, тиммейты для матча, CS2 ранги, турниры CS2, киберспорт CS2, клан CS2, партнеры для CS2, играть в CS2, команда для Faceit, поиск сокомандников CS2, новости CS2, обновление CS2, CS2 патч, последние изменения CS2,',
+    };
+  } catch (error) {
+    console.error('Error generating metadata:', error);
+    return {
+      title: 'CISMatch - Пост',
+      description: 'Страница поста на CISMatch',
+    };
+  }
 }
-const PostsPageDetail = async ({ params }: { params: Promise<{ id: string }> }) => {
-  const { id } = await params;
-  const post: Post = await apiService.get(`/api/post/${id}`);
 
+const PostsPageDetail = async ({ params }: { params: { id: string } }) => {
+  try {
+    const post: Post = await apiService.get(`/api/post/${params.id}`);
 
-  return (
-    <Container className="flex flex-col my-10">
-      <div className="flex justify-center">
-        <div className="w-3/4 main-block-bg mb-10 p-7 rounded-xl">
-          {post.status?.title ? (
+    return (
+      <Container className="flex flex-col my-10">
+        <div className="flex justify-center">
+          <div className="w-3/4 main-block-bg mb-10 p-7 rounded-xl">
+            {post.status?.title ? (
+              <div className="flex">
+                <Badge variant="outline" className="text-white mr-2">{post.type?.title}</Badge>
+                {post.status?.title && <Badge variant="outline" className="text-white mr-2">{post.status?.title}</Badge>}
+                {post.role?.title && <Badge variant="outline" className="text-white">{post.role?.title}</Badge>}
+              </div>
+            ) : ' '}
 
-            <div className="flex">
-              <Badge variant="outline" className="text-white mr-2">{post.type?.title}</Badge>
-              {post.status?.title && <Badge variant="outline" className="text-white mr-2">{post.status?.title}</Badge>}
-              {post.role?.title && <Badge variant="outline" className="text-white">{post.role?.title}</Badge>}
+            <Title text={post.title} size="md" className="font-extrabold mb-4" />
+            <div className="text-gray-200 whitespace-pre-line">{post.body}</div>
+            {post.image_url && <img className="rounded-lg mt-5" src={post.image_url} alt="Post image" />}
+            <div className="flex items-center mt-4">
+              <Avatar>
+                <AvatarImage
+                  src={post.author.steam_avatar ? post.author.steam_avatar : post.author.avatar_url}
+                  alt={post.author.name}
+                />
+                <AvatarFallback className="bg-gray-300 text-gray-800"><UserRound /></AvatarFallback>
+              </Avatar>
+              <div className="text-sm ml-2">{post.author.name}</div>
             </div>
-
-          ) : (
-            ' '
-          )}
-
-          <Title text={post.title} size="md" className="font-extrabold mb-4" />
-          <div className="text-gray-200 whitespace-pre-line">{post.body}</div>
-          {post.image_url ? (
-            <img className="rounded-lg mt-5" src={post.image_url} alt="Post image" />
-          ) : (
-            ''
-          )}
-          <div className="flex items-center mt-4">
-            <Avatar>
-              <AvatarImage
-                src={post.author.steam_avatar ? post.author.steam_avatar : post.author.avatar_url}
-                alt={post.author.name}
-              />
-              <AvatarFallback className="bg-gray-300 text-gray-800"><UserRound /></AvatarFallback>
-            </Avatar>
-            <div className="text-sm ml-2">{post.author.name}</div>
           </div>
         </div>
-      </div>
-      <div className="flex justify-center">
-        <div className="w-3/4 main-block-bg p-7 rounded-xl">
-
+        <div className="flex justify-center">
+          <div className="w-3/4 main-block-bg p-7 rounded-xl">
+            <AddComment postId={post.id} />
+            <CommentsList postId={post.id} />
+          </div>
         </div>
-      </div>
-    </Container>
-  );
+      </Container>
+    );
+  } catch (error) {
+    console.error('Error loading post:', error);
+    // Можно вернуть страницу с ошибкой или редирект
+    return (
+      <Container className="flex flex-col my-10">
+        <div className="flex justify-center">
+          <div className="w-3/4 main-block-bg mb-10 p-7 rounded-xl text-center">
+            <Title text="Ошибка загрузки поста" size="md" className="font-extrabold mb-4" />
+            <p className="text-gray-200">Не удалось загрузить пост. Пожалуйста, попробуйте позже.</p>
+          </div>
+        </div>
+      </Container>
+    );
+  }
 };
 
 export default PostsPageDetail;
