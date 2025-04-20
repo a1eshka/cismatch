@@ -83,8 +83,7 @@ const PostsPageDetail = async ({ params }: { params: Promise<{ id: string }> }) 
       </div>
       <div className="flex justify-center">
         <div className="w-3/4 main-block-bg p-7 rounded-xl">
-          <AddComment postId={post.id} />
-          <CommentsList postId={post.id} />
+
         </div>
       </div>
     </Container>

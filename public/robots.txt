@@ -1,0 +1,11 @@
+User-agent: *
+Disallow: /api/
+Disallow: /login
+Disallow: /profile
+Disallow: /settings
+Disallow: /steam-login-callback
+# Запрет индексации поддоменов
+Disallow: https://api.cismatch.ru/
+Disallow: https://db.cismatch.ru/
+
+Allow: /

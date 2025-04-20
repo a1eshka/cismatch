@@ -79,7 +79,6 @@ const InventoryPage = () => {
             if (!userId) throw new Error('Пользователь не авторизован');
 
             const response = await apiService.get(`/api/auth/user/${userId}/inventory/`);
-            console.log('response', response)
             const { assets = [], descriptions = [] } = response;
             if (!Array.isArray(assets) || !Array.isArray(descriptions)) {
                 throw new Error('Некорректная структура данных');
