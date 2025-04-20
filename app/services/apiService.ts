@@ -2,39 +2,28 @@ import { getAccessToken } from "../lib/actions";
 
 const apiService = {
     get: async function (url: string): Promise<any> {
-        const token = await getAccessToken(); // Проверяем наличие токена
-    
-        const headers: HeadersInit = {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        };
-    
-        // Добавляем заголовок Authorization, если токен есть
-        if (token) {
-          headers['Authorization'] = `Bearer ${token}`;
-        }
-    
-        // Выполняем запрос
+
+        const token = await getAccessToken();
+
         return new Promise((resolve, reject) => {
-          fetch(`${process.env.NEXT_PUBLIC_API_HOST}${url}`, {
-            method: 'GET',
-            headers: headers,
-          })
-            .then(response => {
-              if (!response.ok) {
-                reject(new Error('Ошибка при получении данных'));
-                return;
-              }
-              return response.json();
+            fetch(`${process.env.NEXT_PUBLIC_API_HOST}${url}`, {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+                }
             })
-            .then((json) => {
-              resolve(json);
-            })
-            .catch((error) => {
-              reject(error);
-            });
-        });
-      },
+                .then(response => response.json())
+                .then((json) => {
+
+                    resolve(json);
+                })
+                .catch((error => {
+                    reject(error);
+                }))
+        })
+    },
 
     
     post: async function(url: string, data: any): Promise<any> {
