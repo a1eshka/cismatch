@@ -51,7 +51,14 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
 }
 const PostsPageDetail = async ({ params }: { params: { id: string } }) => {
   const { id } = params;
-  const post: Post = await apiService.get(`/api/post/${id}/`);
+
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_HOST}/api/post/${id}/`, {
+    method: 'GET',
+    headers: { 'Accept': 'application/json' },
+    cache: 'no-store',
+  });
+
+  const post: Post = await res.json();
 
 
   return (
