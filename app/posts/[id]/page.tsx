@@ -30,17 +30,22 @@ interface Post {
     avatar_url?: string;
   };
 }
+export const dynamic = 'force-dynamic';
 
+
+// Функция для генерации метаданных, исправленный синтаксис
 export async function generateMetadata(
   { params }: { params: { id: string } },
   parent?: ResolvingMetadata
 ): Promise<Metadata> {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_HOST}/api/post/${params.id}/`, {
+  const { id } = params;
+
+  // Делаем асинхронный запрос на сервер
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_HOST}/api/post/${id}/`, {
     method: 'GET',
     headers: {
       'Accept': 'application/json',
     },
-    // 👇 обязательно!
     cache: 'no-store',
   });
 
@@ -52,9 +57,12 @@ export async function generateMetadata(
     keywords: 'поиск тиммейтов CS2, найти команду CS2, набор в команду CS2, игроки для CS2, тиммейты для матча, CS2 ранги, турниры CS2, киберспорт CS2, клан CS2, партнеры для CS2, играть в CS2, команда для Faceit, поиск сокомандников CS2, новости CS2, обновление CS2, CS2 патч, последние изменения CS2,',
   };
 }
+
+// Главный компонент страницы с деталями поста
 const PostsPageDetail = async ({ params }: { params: { id: string } }) => {
   const { id } = params;
 
+  // Получаем данные поста по ID
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_HOST}/api/post/${id}/`, {
     method: 'GET',
     headers: { 'Accept': 'application/json' },
