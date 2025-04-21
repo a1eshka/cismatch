@@ -6,8 +6,6 @@ import CommentsList from '@/components/shared/comments/CommentsList';
 import { Title } from '@/components/shared/title';
 import { Container } from '@/components/shared/Conatiner';
 import { UserRound } from 'lucide-react';
-import { Metadata } from 'next';
-import { getAccessToken } from '@/app/lib/actions';
 
 interface Post {
   id: string;
@@ -21,67 +19,31 @@ interface Post {
     title: string;
   };
   type?: {
-    title: string;
-  }
+     title: string;
+   }
   author: {
     name: string;
     steam_avatar?: string;
     avatar_url?: string;
   };
 }
-export async function generateMetadata({ params }: any): Promise<Metadata> {
+export async function generateMetadata({ params }: any ) {
   const postId = params.id;
+  const post: Post = await apiService.getWithoutToken(`/api/post/${postId}`, {});
 
-  try {
-    // Обычный fetch запрос без авторизации
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_HOST}/api/post/${postId}/`, {
-      method: 'GET',
-      headers: {
-        'Accept': 'application/json',
-      },
-      cache: 'no-store',
-    });
-
-    // Проверяем статус ответа
-    if (!res.ok) {
-      throw new Error('Post not found or unauthorized');
-    }
-
-    const post: Post = await res.json();
-
-    return {
-      title: `CISMatch - ${post.title}`,
-      description: `${post.body}`,
-      keywords: 'поиск тиммейтов CS2, найти команду CS2, набор в команду CS2, игроки для CS2, тиммейты для матча, CS2 ранги, турниры CS2, киберспорт CS2, клан CS2, партнеры для CS2, играть в CS2, команда для Faceit, поиск сокомандников CS2, новости CS2, обновление CS2, CS2 патч, последние изменения CS2,',
-    };
-  } catch (error) {
-    // Если ошибка, выводим дефолтные метаданные
-    return {
-      title: 'Ошибка',
-      description: 'Не удалось загрузить пост',
-      keywords: 'ошибка, пост не найден',
-    };
-  }
+  return {
+    title: `CISMatch - ${post.title}`,
+    description: `${post.body}`,
+    keywords: 'поиск тиммейтов CS2, найти команду CS2, набор в команду CS2, игроки для CS2, тиммейты для матча, CS2 ранги, турниры CS2, киберспорт CS2, клан CS2, партнеры для CS2, играть в CS2, команда для Faceit, поиск сокомандников CS2, новости CS2, обновление CS2, CS2 патч, последние изменения CS2,',
+  };
 }
-
 const PostsPageDetail = async ({ params }: any) => {
+  // Получаем postId из params
   const postId = params.id;
 
-  try {
-    // Обычный fetch запрос без авторизации
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_HOST}/api/post/${postId}/`, {
-      method: 'GET',
-      headers: {
-        'Accept': 'application/json',
-      },
-      cache: 'no-store',
-    });
-    
-    if (!res.ok) {
-      console.log('Fetch failed with status:', res.status);
-      throw new Error('Post not found or unauthorized');
-    }
-    const post: Post = await res.json();
+  // Асинхронно загружаем данные поста
+  const post: Post = await apiService.getWithoutToken(`/api/post/${postId}`, {});
+
   return (
     <Container className="flex flex-col my-10">
       <div className="flex justify-center">
@@ -125,15 +87,6 @@ const PostsPageDetail = async ({ params }: any) => {
       </div>
     </Container>
   );
-} catch (error) {
-  // Если ошибка, показываем сообщение
-  return (
-    <div className="error-message">
-      <h1>Ошибка при загрузке поста</h1>
-      <p>Попробуйте позже.</p>
-    </div>
-  );
-}
 };
 
 export default PostsPageDetail;
