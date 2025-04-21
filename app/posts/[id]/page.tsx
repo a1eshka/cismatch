@@ -29,7 +29,7 @@ interface Post {
 }
 export async function generateMetadata({ params }: any ) {
   const postId = params.id;
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_HOST}/api/post/${postId}/`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_HOST}/api/post/${postId}`, {
     method: 'GET',
     headers: {
       'Accept': 'application/json',
@@ -53,7 +53,7 @@ const PostsPageDetail = async ({ params }: any) => {
   // Получаем postId из params
   const postId = params.id;
 
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_HOST}/api/post/${postId}/`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_HOST}/api/post/${postId}`, {
     method: 'GET',
     headers: {
       'Accept': 'application/json',
