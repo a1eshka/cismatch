@@ -29,8 +29,20 @@ interface Post {
 }
 export async function generateMetadata({ params }: any ) {
   const postId = params.id;
-  const post: Post = await apiService.get(`/api/post/${postId}`);
-
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_HOST}/api/post/${postId}/`, {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Authorization': '',
+    },
+    cache: 'no-store',
+  });
+  if (!res.ok) {
+    console.log('❌ Status meta:', res.status);
+    throw new Error('Post fetch failed');
+  }
+  
+  const post: Post = await res.json();
   return {
     title: `CISMatch - ${post.title}`,
     description: `${post.body}`,
@@ -44,12 +56,14 @@ const PostsPageDetail = async ({ params }: any) => {
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_HOST}/api/post/${postId}/`, {
     method: 'GET',
     headers: {
-      Accept: 'application/json',
+      'Accept': 'application/json',
+      'Authorization': '',
     },
     cache: 'no-store',
   });
   
   if (!res.ok) {
+    console.log('❌ Status:', res.status);
     throw new Error('Post fetch failed');
   }
   
