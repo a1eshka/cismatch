@@ -32,8 +32,16 @@ interface Post {
 }
 export const dynamic = 'force-dynamic';
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
-  const { id } = params;
-  const post: Post = await apiService.get(`/api/post/${id}/`);
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_HOST}/api/post/${params.id}/`, {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json',
+    },
+    // 👇 обязательно!
+    cache: 'no-store',
+  });
+
+  const post: Post = await res.json();
 
   return {
     title: `CISMatch - ${post.title}`,
