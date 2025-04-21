@@ -29,7 +29,7 @@ interface Post {
 }
 export async function generateMetadata({ params }: any ) {
   const postId = params.id;
-  const post: Post = await apiService.getWithoutToken(`/api/post/${postId}`, {});
+  const post: Post = await apiService.get(`/api/post/${postId}`);
 
   return {
     title: `CISMatch - ${post.title}`,
@@ -42,7 +42,7 @@ const PostsPageDetail = async ({ params }: any) => {
   const postId = params.id;
 
   // Асинхронно загружаем данные поста
-  const post: Post = await apiService.getWithoutToken(`/api/post/${postId}`, {});
+  const post: Post = await apiService.get(`/api/post/${postId}`);
 
   return (
     <Container className="flex flex-col my-10">

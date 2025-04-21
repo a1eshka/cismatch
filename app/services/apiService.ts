@@ -25,11 +25,10 @@ const apiService = {
         })
     },
 
-    getWithoutToken: async function(url: string, data: any): Promise<any> {
-
+        postWithoutToken: async function(url: string, data: any): Promise<any> {
         return new Promise((resolve, reject) => {
             fetch(`${process.env.NEXT_PUBLIC_API_HOST}${url}`, {
-                method: 'GET',
+                method: 'POST',
                 body: data,
                 headers: {
                     'Accept': 'application/json',
