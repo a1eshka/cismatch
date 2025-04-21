@@ -8,7 +8,7 @@ import { Title } from '@/components/shared/title';
 import { Container } from '@/components/shared/Conatiner';
 import { UserRound } from 'lucide-react';
 import { Metadata } from 'next';
-
+export const dynamic = 'force-dynamic';
 
 interface Post {
   id: string;
@@ -31,8 +31,8 @@ interface Post {
   };
 }
 
-export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
-  const { id } = await params;
+export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
+  const { id } = params;
   const post: Post = await apiService.get(`/api/post/${id}/`);
 
   return {
@@ -41,8 +41,8 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
     keywords: 'поиск тиммейтов CS2, найти команду CS2, набор в команду CS2, игроки для CS2, тиммейты для матча, CS2 ранги, турниры CS2, киберспорт CS2, клан CS2, партнеры для CS2, играть в CS2, команда для Faceit, поиск сокомандников CS2, новости CS2, обновление CS2, CS2 патч, последние изменения CS2,',
   };
 }
-const PostsPageDetail = async ({ params }: { params: Promise<{ id: string }> }) => {
-  const { id } = await params;
+const PostsPageDetail = async ({ params }: { params: { id: string } }) => {
+  const { id } = params;
   const post: Post = await apiService.get(`/api/post/${id}/`);
 
 
