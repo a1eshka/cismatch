@@ -7,6 +7,7 @@ import { Title } from '@/components/shared/title';
 import { Container } from '@/components/shared/Conatiner';
 import { UserRound } from 'lucide-react';
 import { Metadata } from 'next';
+import { getAccessToken } from '@/app/lib/actions';
 
 interface Post {
   id: string;
@@ -82,7 +83,7 @@ const PostsPageDetail = async ({ params }: any) => {
     }
 
     const post: Post = await res.json();
-    
+    const token = await getAccessToken(); 
   return (
     <Container className="flex flex-col my-10">
       <div className="flex justify-center">
@@ -120,7 +121,13 @@ const PostsPageDetail = async ({ params }: any) => {
       </div>
       <div className="flex justify-center">
         <div className="w-3/4 main-block-bg p-7 rounded-xl">
-          <AddComment postId={post.id} />
+        {token ? (
+              <AddComment postId={post.id} />
+            ) : (
+              <div className="text-white">
+                Чтобы комментировать, <a href="/login" className="underline text-blue-400">войдите в аккаунт</a>.
+              </div>
+            )}
           <CommentsList postId={post.id} />
         </div>
       </div>
