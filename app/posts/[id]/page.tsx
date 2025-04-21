@@ -8,7 +8,7 @@ import { Title } from '@/components/shared/title';
 import { Container } from '@/components/shared/Conatiner';
 import { UserRound } from 'lucide-react';
 import { Metadata } from 'next';
-export const dynamic = 'force-dynamic';
+
 
 interface Post {
   id: string;
@@ -30,7 +30,7 @@ interface Post {
     avatar_url?: string;
   };
 }
-
+export const dynamic = 'force-dynamic';
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
   const { id } = params;
   const post: Post = await apiService.get(`/api/post/${id}/`);
