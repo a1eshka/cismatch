@@ -121,14 +121,7 @@ const PostsPageDetail = async ({ params }: any) => {
       </div>
       <div className="flex justify-center">
         <div className="w-3/4 main-block-bg p-7 rounded-xl">
-        {token ? (
-              <AddComment postId={post.id} />
-            ) : (
-              <div className="text-white">
-                Чтобы комментировать, <a href="/login" className="underline text-blue-400">войдите в аккаунт</a>.
-              </div>
-            )}
-          <CommentsList postId={post.id} />
+
         </div>
       </div>
     </Container>
