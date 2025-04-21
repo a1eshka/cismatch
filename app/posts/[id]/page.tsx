@@ -76,14 +76,12 @@ const PostsPageDetail = async ({ params }: any) => {
       },
       cache: 'no-store',
     });
-
-    // Проверяем статус ответа
+    
     if (!res.ok) {
+      console.log('Fetch failed with status:', res.status);
       throw new Error('Post not found or unauthorized');
     }
-
     const post: Post = await res.json();
-    const token = await getAccessToken(); 
   return (
     <Container className="flex flex-col my-10">
       <div className="flex justify-center">
@@ -121,7 +119,8 @@ const PostsPageDetail = async ({ params }: any) => {
       </div>
       <div className="flex justify-center">
         <div className="w-3/4 main-block-bg p-7 rounded-xl">
-
+          <AddComment postId={post.id} />
+          <CommentsList postId={post.id} />
         </div>
       </div>
     </Container>
