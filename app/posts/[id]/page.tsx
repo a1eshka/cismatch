@@ -1,5 +1,5 @@
-const PostsPageDetail = async () => {
-  return <div>Еуые</div>;
+const PostsPageDetail = async ({ params }: any) => {
+  return <div>Post ID: {params.id}</div>;
 };
 
 export default PostsPageDetail;
