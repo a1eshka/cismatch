@@ -7,7 +7,7 @@ import CommentsList from '@/components/shared/comments/CommentsList';
 import { Title } from '@/components/shared/title';
 import { Container } from '@/components/shared/Conatiner';
 import { UserRound } from 'lucide-react';
-import { Metadata } from 'next';
+import { Metadata, ResolvingMetadata } from 'next';
 
 
 interface Post {
@@ -30,8 +30,11 @@ interface Post {
     avatar_url?: string;
   };
 }
-export const dynamic = 'force-dynamic';
-export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
+
+export async function generateMetadata(
+  { params }: { params: { id: string } },
+  parent?: ResolvingMetadata
+): Promise<Metadata> {
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_HOST}/api/post/${params.id}/`, {
     method: 'GET',
     headers: {
@@ -98,7 +101,8 @@ const PostsPageDetail = async ({ params }: { params: { id: string } }) => {
       </div>
       <div className="flex justify-center">
         <div className="w-3/4 main-block-bg p-7 rounded-xl">
-
+          <AddComment postId={post.id} />
+          <CommentsList postId={post.id} />
         </div>
       </div>
     </Container>
