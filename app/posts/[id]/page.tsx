@@ -41,8 +41,19 @@ const PostsPageDetail = async ({ params }: any) => {
   // Получаем postId из params
   const postId = params.id;
 
-  // Асинхронно загружаем данные поста
-  const post: Post = await apiService.get(`/api/post/${postId}`);
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_HOST}/api/post/${postId}/`, {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json',
+    },
+    cache: 'no-store',
+  });
+  
+  if (!res.ok) {
+    throw new Error('Post fetch failed');
+  }
+  
+  const post: Post = await res.json();
 
   return (
     <Container className="flex flex-col my-10">
