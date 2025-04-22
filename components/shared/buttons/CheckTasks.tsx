@@ -14,11 +14,15 @@ interface Task {
     isDaily?: boolean;
     completedToday?: boolean;
 }
-
+interface CompletedTask {
+    id: number;
+    isDaily: boolean;
+    completedToday: boolean;
+}
 const TaskList = () => {
     const [tasks, setTasks] = useState<Task[]>([]);
     const [status, setStatus] = useState("");
-    const [completedTasks, setCompletedTasks] = useState<number[]>([]);
+    const [completedTasks, setCompletedTasks] = useState<CompletedTask[]>([]);
     // Получение списка заданий
     useEffect(() => {
         const fetchTasks = async () => {
@@ -52,7 +56,7 @@ const TaskList = () => {
             const response = await apiService.post("/api/raffles/tasks/check/", JSON.stringify({ taskId }));
             if (response.success) {
                 toast.success(response.success);
-                setCompletedTasks((prev) => [...prev, taskId]);
+                setCompletedTasks(response.completedTasks); 
                 if (response.redirect_url) {
                     window.open(response.redirect_url, "_blank");
                 }
@@ -88,13 +92,15 @@ const TaskList = () => {
                                 {/* Кнопка для проверки задания */}
                                 <button
                                     onClick={() => handleCheckTask(task.id)}
-                                    disabled={completedTasks.includes(task.id)}
-                                    className={`mt-4 px-4 py-2 rounded-md transition ${completedTasks.includes(task.id)
+                                    disabled={completedTasks?.some(taskItem => 
+                                        taskItem.id === task.id && (!taskItem.isDaily || taskItem.completedToday)
+                                    )}
+                                    className={`mt-4 px-4 py-2 rounded-md transition ${completedTasks?.some(taskItem => taskItem.id === task.id && (!taskItem.isDaily || taskItem.completedToday))
                                             ? 'border border-gray-500 cursor-not-allowed text-gray-300'
                                             : 'border border-green-500 text-green-500 hover:bg-green-600/20'
                                         }`}
                                 >
-                                    {completedTasks.includes(task.id)
+                                    {completedTasks?.some(taskItem => taskItem.id === task.id && (!taskItem.isDaily || taskItem.completedToday))
                                         ? <div className="flex">Выполнено <CheckCheck size={15} className="ml-1" /></div>
                                         : 'Проверить'}
                                 </button>

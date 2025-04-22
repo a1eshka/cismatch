@@ -6,6 +6,7 @@ import CommentsList from '@/components/shared/comments/CommentsList';
 import { Title } from '@/components/shared/title';
 import { Container } from '@/components/shared/Conatiner';
 import { UserRound } from 'lucide-react';
+import Link from 'next/link';
 
 interface Post {
   id: string;
@@ -22,6 +23,7 @@ interface Post {
      title: string;
    }
   author: {
+    id: string;
     name: string;
     steam_avatar?: string;
     avatar_url?: string;
@@ -100,7 +102,9 @@ const PostsPageDetail = async ({ params }: any) => {
               />
               <AvatarFallback className="bg-gray-300 text-gray-800"><UserRound /></AvatarFallback>
             </Avatar>
-            <div className="text-sm ml-2">{post.author.name}</div>
+            <Link href={`/profile/${post.author.id}`} className="hover:text-gray-400 ml-1">
+                            {post.author.name}
+                        </Link>
           </div>
         </div>
       </div>
