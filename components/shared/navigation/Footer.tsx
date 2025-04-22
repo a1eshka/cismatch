@@ -53,6 +53,8 @@ export default function Footer() {
       {/* Нижняя часть */}
       <div className="mt-10 text-center text-xs text-gray-500 border-t border-gray-800 pt-6">
         © {new Date().getFullYear()} CISMatch. Все права защищены.
+        <div>Мельников Алексей Денисович ИНН 780513833110</div>
+        <div>info@cismatch.ru</div>
       </div>
     </footer>
   );
