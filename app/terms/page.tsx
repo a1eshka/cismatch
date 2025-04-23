@@ -70,9 +70,9 @@ export default function TermsPage() {
         <p className="text-sm text-gray-400">
           По всем вопросам, связанным с условиями соглашения или оплатой, вы
           можете обратиться в нашу{" "}
-          <a href="/support" className="text-blue-400 underline">
+          <a href="https://t.me/cismatch_support" className="text-blue-400 underline">
             службу поддержки
-          </a>.
+          </a>. 
         </p>
         
       <p className="mb-4 text-sm text-gray-400">
