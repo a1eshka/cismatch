@@ -239,7 +239,7 @@ const InventoryPage = () => {
         <Container className="flex flex-col my-10 px-4 sm:px-0">
             <div>
                 <div className="bg-gray-600/10 p-4 rounded-xl mb-4 relative">
-                    <div className="flex flex-col space-y-2 w-1/2">
+                    <div className="flex flex-col space-y-2 md:w-1/2 w-full">
                         <div className="text-2xl font-bold">Скупка предметов CS2 – выгодно, быстро, безопасно!</div>
                         <div className="text-sm font-light text-gray-400">Хотите продать скины из Counter-Strike 2 (CS2) по выгодной цене? Мы предлагаем моментальный выкуп предметов Steam с мгновенными выплатами на удобные платежные системы.</div>
                     </div>
@@ -249,7 +249,7 @@ const InventoryPage = () => {
                         alt="Promo Code Image"
                         width={484} // Ширина картинки
                         height={484} // Высота картинки
-                        className="absolute -bottom-4 right-0 mb-4 mr-4 rotate-12 filter grayscale transition-all duration-300 hover:grayscale-0" // Отступ от текста
+                        className="absolute -bottom-4 right-0 mb-4 mr-4 rotate-12 filter grayscale transition-all duration-300 hover:grayscale-0 md:block hidden" // Отступ от текста
                     />
                 </div>
                 <div className="flex flex-col md:flex-row md:space-x-4 space-y-4 md:space-y-0 mb-4">
