@@ -1,13 +1,10 @@
 import AdvertList from "@/components/shared/adverts/AdvertsList";
 import { Container } from "@/components/shared/Conatiner";
 import DailyGrenades from "@/components/shared/grenades/DailyGrenades";
-import GrenadeStory from "@/components/shared/grenades/GrenadeStory";
 import MiniNewsList from "@/components/shared/mininews/MiniNewsList";
-import SeoHead from "@/components/shared/navigation/SeoHead";
 import PostList from "@/components/shared/PostList";
 import ServerList from "@/components/shared/servers/ServerList";
 import Social from "@/components/shared/social/Social";
-import { Metadata } from "next";
 
 
 export const metadata = {

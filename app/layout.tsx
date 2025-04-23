@@ -1,8 +1,5 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
 import "./globals.css";
-import Navigation from "../components/shared/navigation/Navigation";
-import Modal from "@/components/shared/modals/Modal";
 import LoginModal from "@/components/shared/modals/LoginModal";
 import SignUpModal from "@/components/shared/modals/SignUpModal";
 import AddPostModal from "@/components/shared/modals/AddPostModal";

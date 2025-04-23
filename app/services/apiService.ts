@@ -41,8 +41,6 @@ const apiService = {
             })
                 .then(response => response.json())
                 .then((json) => {
-                    console.log('Response:', json);
-
                     resolve(json);
                 })
                 .catch((error => {
@@ -64,8 +62,6 @@ const apiService = {
             })
                 .then(response => response.json())
                 .then((json) => {
-                    console.log('Response:', json);
-
                     resolve(json);
                 })
                 .catch((error => {
@@ -89,7 +85,6 @@ const apiService = {
             })
                 .then(response => response.json())
                 .then((json) => {
-                    console.log('Response:', json);
                     resolve(json);
                 })
                 .catch((error) => {
@@ -109,11 +104,9 @@ const apiService = {
         })
             .then(response => response.json())
             .then((json) => {
-                console.log('Response:', json);
                 return json;
             })
             .catch((error) => {
-                console.error('Error:', error);
                 throw error;
             });
     },
@@ -133,7 +126,6 @@ const apiService = {
             })
                 .then(response => response.json())
                 .then((json) => {
-                    console.log('Response:', json);
                     resolve(json);
                 })
                 .catch((error) => {
@@ -152,11 +144,9 @@ const apiService = {
         })
             .then(response => response.json())
             .then((json) => {
-                console.log('Response:', json);
                 return json;
             })
             .catch((error) => {
-                console.error('Error:', error);
                 throw error;
             });
     },
