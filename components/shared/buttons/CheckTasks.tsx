@@ -43,7 +43,7 @@ const TaskList = () => {
                 const response = await apiService.get("/api/raffles/tasks/completed/");
                 setCompletedTasks(response.completedTasks);  // API должно возвращать массив ID выполненных задач
             } catch (error) {
-                console.error("Ошибка загрузки выполненных заданий:", error);
+                //console.error("Ошибка загрузки выполненных заданий:", error);
             }
         };
 
@@ -69,7 +69,7 @@ const TaskList = () => {
             setStatus(response.success || response.error || response.info);
         } catch (error) {
             setStatus("Ошибка при проверке задания");
-            console.error("Ошибка при проверке задания:", error);
+            //console.error("Ошибка при проверке задания:", error);
         }
     };
 
