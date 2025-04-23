@@ -77,7 +77,7 @@ const RafflesPage = () => {
                     //console.warn('User is not logged in');
                 }
             } catch (err) {
-                console.error('Error fetching user data:', err);
+                //console.error('Error fetching user data:', err);
                 setError('Failed to load user data.');
             }
         };
@@ -95,7 +95,7 @@ const RafflesPage = () => {
                                     const ticketCountResponse = await apiService.get(`/api/raffles/tickets/count/${userId}/${raffle.id}/`);
                                     userTickets = ticketCountResponse.ticket_count || 0;
                                 } catch (err) {
-                                    console.error('Error fetching ticket count:', err);
+                                    //console.error('Error fetching ticket count:', err);
                                     userTickets = 0;
                                 }
                             }
@@ -114,7 +114,7 @@ const RafflesPage = () => {
                     setError('Invalid raffle data format');
                 }
             } catch (err) {
-                console.error('Error fetching raffles:', err);
+                //console.error('Error fetching raffles:', err);
                 setError('Failed to load raffles.');
             }
         };
@@ -193,7 +193,7 @@ const RafflesPage = () => {
             if (err.response?.status === 400) {
                 toast.error('Недостаточно средств для покупки!');
             } else {
-                console.error('Error buying ticket:', err);
+                //console.error('Error buying ticket:', err);
                 toast.error('Failed to buy ticket');
             }
         }
