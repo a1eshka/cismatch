@@ -68,6 +68,9 @@ const TaskList = () => {
 
             setStatus(response.success || response.error || response.info);
         } catch (error) {
+            if (!axios.isAxiosError(error) || error.response?.status !== 400) {
+                console.error("Ошибка при проверке задания:", error);
+            }
             setStatus("Ошибка при проверке задания");
             //console.error("Ошибка при проверке задания:", error);
         }
