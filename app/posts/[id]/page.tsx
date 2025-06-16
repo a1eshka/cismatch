@@ -74,7 +74,7 @@ const PostsPageDetail = async ({ params }: any) => {
   return (
     <Container className="flex flex-col my-10">
       <div className="flex justify-center">
-        <div className="w-3/4 main-block-bg mb-10 p-7 rounded-xl">
+        <div className="w-[calc(100%-10px)] sm:w-[calc(100%-10px)] md:w-3/4 main-block-bg mb-10 p-7 rounded-xl mx-[5px] md:mx-0">
           {post.status?.title ? (
 
             <div className="flex">
@@ -109,7 +109,7 @@ const PostsPageDetail = async ({ params }: any) => {
         </div>
       </div>
       <div className="flex justify-center">
-        <div className="w-3/4 main-block-bg p-7 rounded-xl">
+        <div className="w-[calc(100%-10px)] sm:w-[calc(100%-10px)] md:w-3/4 main-block-bg mb-10 p-7 rounded-xl mx-[5px] md:mx-0">
           <AddComment postId={post.id} />
           <CommentsList postId={post.id} />
         </div>
